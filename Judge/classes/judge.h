@@ -3,7 +3,7 @@
 #define JUDGE_H_INCLUDED
 
 #include "common.h"
-#include "JudgeBase.h"
+#include "judgeBase.h"
 
 class CJudge {
 public:
@@ -15,7 +15,7 @@ private:
 public:
     static int COUNT_JUDGE;
 private:
-    int run_id;
+    std::string judge_root;
     std::map<int, CJudgeBase*> judges;
 };
 

@@ -1,5 +1,6 @@
-BINARY := ~/judge/Judge_main
-SRCDIR := ..
+BINARY 		:= /home/judge/Judge_main
+BINARY_PATH	:= /home/judge/
+SRCDIR 		:= ..
 
 .PHONY: all clean
 all: clean_binart $(BINARY)
@@ -11,7 +12,7 @@ DEP_FILES := $(subst /,-,$(subst $(SRCDIR)/,,$(CPP_FILES:%.cpp=%.d)))
 
 CPPFLAGS= -g -I.. -I/usr/include/mysql
 
-LDFLAGS = -L/usr/lib/i386-linux-gnu -lmysqlclient
+LDFLAGS = -L/usr/lib/i386-linux-gnu -lmysqlclient -lpthread
 
 # Generate dependence, including rules to generate object files
 %.d:
@@ -29,6 +30,9 @@ endif
 
 ifneq ($(BINARY),)
 $(BINARY): $(OBJ_FILES)
+	@if [ ! -e $(BINARY_PATH) ]; then \
+		mkdir $(BINARY_PATH); \
+	fi
 	g++ $(CPPFLAGS) $^ $(LDFLAGS) -o $@   
 	@echo                                                                   
 	@echo --- finished ---

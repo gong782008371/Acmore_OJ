@@ -1,12 +1,14 @@
 #include "judge.h"
 
-#include "JudgeCPP.h"
+#include "judgeGPP.h"
 
 int CJudge ::COUNT_JUDGE = 0;
 
 CJudge::CJudge()
 {
-    run_id = ++ CJudge::COUNT_JUDGE;
+    char path[100] = {0};
+    sprintf(path, "%s%d/", JUDGE_PATH, ++ CJudge::COUNT_JUDGE);
+    judge_root = std::string(path);
 }
 
 int CJudge::RunJudge(const Record& record)
@@ -15,7 +17,10 @@ int CJudge::RunJudge(const Record& record)
     //check object not null
     CheckJudge(lang);
     // initialize first
-    judges[lang]->Initialize(record);
+    if (ERROR == judges[lang]->Initialize(record))
+    {
+        return ERROR;
+    }
     // begin compile
     if(!judges[lang]->Compile())
     {
@@ -31,8 +36,8 @@ void CJudge::CheckJudge(int language) {
         return ;
     }
     switch (language) {
-    case LG_CPP:
-        judges[LG_CPP] = new CJudgeCPP();
+    case LG_GPP:
+        judges[LG_GPP] = new CJudgeGPP(judge_root);
         break;
     }
 }

@@ -11,7 +11,7 @@
 #define RT_TLE 5
 #define RT_MLE 6
 
-#define LG_CPP  1
+#define LG_GPP  1
 #define LG_JAVA 2
 
 #define MYSQL_IP                 "localhost"
@@ -19,7 +19,13 @@
 #define MYSQL_PASSWORD  "000000"
 #define MYSQL_DATABASE  "test"
 
-#define DATA_PATH "~/judge/data/"
+#define JUDGE_ROOT 	"/home/judge"
+#define DATA_PATH 	"/home/judge/data"
+#define JUDGE_PATH 	"/home/judge/run"
 
+#define THREAD_NUM 1
+
+const std::string warn_log_path = "/home/judge/log/warn/";
+const std::string error_log_path = "/home/judge/log/error/";
 
 #endif
