@@ -12,8 +12,8 @@
 #endif
 
 #ifdef DEBUG
-#define TRACE_WARN printf
-#define TRACE_ERROR printf
+#define TRACE_WARN console_msg
+#define TRACE_ERROR console_msg
 #else
 #define TRACE_WARN(fmt, ...) Warn_Log(fmt, ##__VA_ARGS__)
 #define TRACE_ERROR(fmt, ...) Error_Log(fmt, ##__VA_ARGS__)

@@ -11,7 +11,7 @@ public:
     CJudgeGPP(std::string judge_root);
     ~CJudgeGPP();
     virtual bool Initialize(const Record& record);
-    virtual bool Compile() ;
+    virtual int Compile() ;
     virtual int Run() ;
 };
 

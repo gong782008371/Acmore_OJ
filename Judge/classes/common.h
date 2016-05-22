@@ -36,6 +36,7 @@
 #include "../config.h"
 
 #define ERROR 0x3fffffff
+#define SUCCESS 1
 
 #define DEBUG
 

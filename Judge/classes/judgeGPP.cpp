@@ -3,8 +3,8 @@
 
 CJudgeGPP::CJudgeGPP(std::string judge_root)
 {
-    judge_path = judge_root;
-    ce_out_path = judge_path + "ce.out";
+    folder_judge = judge_root;
+    path_file_ce = folder_judge + "ce.out";
 }
 CJudgeGPP::~CJudgeGPP()
 {
@@ -13,6 +13,7 @@ CJudgeGPP::~CJudgeGPP()
 
 bool CJudgeGPP::Initialize(const Record& record)
 {
+    ClearFiles();
     // initial required fields
     if (!InitializeFields(record, false))
     {
@@ -34,35 +35,25 @@ bool CJudgeGPP::Initialize(const Record& record)
     return true;
 }
 
-bool CJudgeGPP::Compile() 
+int CJudgeGPP::Compile() 
 {
     //g++ Main.cpp -o Main -fno-asm -Wall -lm --static -std=c++0x -DONLINE_JUDGE
     const char * CP[] = { "g++", "Main.cpp", "-o", "Main", "-fno-asm", "-Wall",
             "-lm", "--static", "-std=c++0x", "-DONLINE_JUDGE", NULL };
-    int pid = fork();
-    if(pid == 0)
+    if (!CJudgeBase::Compile(CP))
     {
-        SetCompileEnvirement(false);
-        execvp(CP[0], (char * const *) CP);
-        exit(0);
+        TRACE_WARN("an error when compile.");
+        return -1;
     }
-    else
-    {
-        int status = 0;
-        waitpid(pid, &status, 0);
-        status = get_file_size(ce_out_path.c_str());
-        if(status)
-        {
-            //console_msg("compile error with solution_id(%d)", solution_id);
-            WhenCompileError();
-        }
-        return status == 0;
-    }
-    return true;
+    return result;
 }
 
-int CJudgeGPP::Run() 
+int CJudgeGPP::Run()
 {
-    return RT_AC;
+    const char * RUN[] = {"./Main", "./Main", NULL};
+    if(!CJudgeBase::Run(RUN))
+    {
+        return -1;
+    }
+    return result;
 }
-
