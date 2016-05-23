@@ -38,7 +38,7 @@ bool CJudgeGPP::Initialize(const Record& record)
 int CJudgeGPP::Compile() 
 {
     //g++ Main.cpp -o Main -fno-asm -Wall -lm --static -std=c++0x -DONLINE_JUDGE
-    const char * CP[] = { "g++", "Main.cpp", "-o", "Main", "-fno-asm", "-Wall",
+    const char * CP[] = { "g++", "Main.cpp", "-o", "Main", "-fno-asm",
             "-lm", "--static", "-std=c++0x", "-DONLINE_JUDGE", NULL };
     if (!CJudgeBase::Compile(CP))
     {
