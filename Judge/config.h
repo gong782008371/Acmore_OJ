@@ -25,7 +25,7 @@
 #define FOLDER_DATA 	"/home/judge/data"
 #define FOLDER_JUDGE 	"/home/judge/run"
 
-#define THREAD_NUM 1
+#define THREAD_NUM 4
 
 const std::string warn_log_path = "/home/judge/log/warn/";
 const std::string error_log_path = "/home/judge/log/error/";

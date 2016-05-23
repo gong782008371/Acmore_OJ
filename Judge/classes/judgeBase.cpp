@@ -88,6 +88,7 @@ bool CJudgeBase::SetCompileEnvirement()
 
 bool CJudgeBase::SetRunTimeEnvirement()
 {
+    nice(19);
     chdir(folder_judge.c_str());
 
     freopen(path_file_in.c_str(), "r", stdin);
@@ -95,16 +96,18 @@ bool CJudgeBase::SetRunTimeEnvirement()
     freopen(path_file_error.c_str(), "a+", stderr);
     system("sudo chmod a+w *.out");
 
-    //ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+    ptrace(PTRACE_TRACEME, 0, NULL, NULL);
 
     struct rlimit LIM;
 
-    LIM.rlim_cur = time_limit / 1000 ;
-    LIM.rlim_max = time_limit / 1000 ;
+    LIM.rlim_cur = (time_limit - single_time / 1000) + 1;
+    LIM.rlim_max = LIM.rlim_cur;
     setrlimit(RLIMIT_CPU, &LIM);
+    alarm(0);
+    alarm(time_limit * 10);
 
-    LIM.rlim_max = STD_F_LIM + STD_MB;
     LIM.rlim_cur = STD_F_LIM;
+    LIM.rlim_max = STD_F_LIM + STD_MB;
     setrlimit(RLIMIT_FSIZE, &LIM);
 
     LIM.rlim_cur = LIM.rlim_max = 1;
@@ -115,7 +118,7 @@ bool CJudgeBase::SetRunTimeEnvirement()
     setrlimit(RLIMIT_STACK, &LIM);
 
     LIM.rlim_cur = STD_MB * memory_limit / 2 * 3;
-    LIM.rlim_max = STD_MB * memory_limit * 2;
+    LIM.rlim_max = STD_MB * 256;
     if (!is_java) setrlimit(RLIMIT_AS, &LIM);
 }
 
@@ -173,7 +176,7 @@ bool CJudgeBase::Run(const char * RUN[])
             JudgeSolution();
         }
     }
-    mysqlOp->UpdateSolution(result, used_time, used_memory, solution_id);
+    mysqlOp->UpdateSolution(result, used_time, used_memory >> 10, solution_id);
     printf("end run (%d)\n", solution_id);
     return true;
 }
@@ -299,13 +302,13 @@ bool CJudgeBase::WacthSolution()
             break;
         }
         exitcode = WEXITSTATUS(status);
-        if ((is_java && exitcode == 17) || exitcode == 0x05 || exitcode == 0)
-            ;
+        if ((is_java && exitcode == 17) || exitcode == 0x05 || exitcode == 0) ;
         else
         {
             if (result == RT_AC) 
             {
-                switch (exitcode) {
+                switch (exitcode) 
+                {
                 case SIGCHLD:
                 case SIGALRM:
                     alarm(0);
@@ -337,7 +340,8 @@ bool CJudgeBase::WacthSolution()
 
             if (result == RT_AC) 
             {
-                switch (sig) {
+                switch (sig) 
+                {
                 case SIGCHLD:
                 case SIGALRM:
                     alarm(0);
@@ -409,6 +413,8 @@ int CJudgeBase::Compare(std::string out, std::string usr)
 }
 bool CJudgeBase::JudgeSolution()
 {
+    if(result == RT_TLE && used_time < time_limit * 1000)
+        used_time = time_limit * 1000;
     if (result == RT_AC && used_time > time_limit * 1000)
         result = RT_TLE;
     if (used_memory > memory_limit * STD_MB)
@@ -429,7 +435,7 @@ int CJudgeBase::get_proc_status(int pid, const char * mark)
     char fn[BUFFER_SIZE], buf[BUFFER_SIZE];
     int ret = 0;
     sprintf(fn, "/proc/%d/status", pid);
-    pf = fopen(fn, "re");
+    pf = fopen(fn, "r");
     int m = strlen(mark);
     while (pf && fgets(buf, BUFFER_SIZE - 1, pf)) 
     {

@@ -40,7 +40,7 @@ int CEncapMysql::Connect(const char* szDbIp, const char* szUser,
         ERRMSG2("%s", mysql_error(&m_connection));
         return -1;
     }
-    printf("[mysql] conn to %s [user:%s] succ!\r\n", szDbIp, szUser);
+    //printf("[mysql] conn to %s [user:%s] succ!\r\n", szDbIp, szUser);
     //设置连接标志为 true
     SetConnected(true);
     return 0;
