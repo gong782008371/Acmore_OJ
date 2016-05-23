@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50051
 File Encoding         : 65001
 
-Date: 2016-05-20 15:37:20
+Date: 2016-05-24 00:35:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -84,7 +84,7 @@ CREATE TABLE `problems` (
   `total_submit` int(11) NOT NULL default '0',
   `accept_submit` int(11) NOT NULL default '0',
   PRIMARY KEY  (`problem_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1007 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=1009 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for solution
@@ -101,6 +101,7 @@ CREATE TABLE `solution` (
   `language` int(11) default NULL,
   `ip` varchar(20) default NULL,
   `contest_id` int(11) default NULL,
+  `code_length` int(11) default '0',
   PRIMARY KEY  (`solution_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
