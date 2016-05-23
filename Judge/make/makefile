@@ -1,5 +1,5 @@
-BINARY 		:= /home/judge/Judge_main
-BINARY_PATH	:= /home/judge/
+BINARY 		:= /home/Acmore_judge/Judge_main
+BINARY_PATH	:= /home/Acmore_judge/
 SRCDIR 		:= ..
 
 .PHONY: all clean

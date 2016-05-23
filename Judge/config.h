@@ -21,13 +21,13 @@
 #define MYSQL_PASSWORD  "000000"
 #define MYSQL_DATABASE  "test"
 
-#define JUDGE_ROOT 	"/home/judge"
-#define FOLDER_DATA 	"/home/judge/data"
-#define FOLDER_JUDGE 	"/home/judge/run"
+#define JUDGE_ROOT 	"/home/Acmore_judge"
+#define FOLDER_DATA 	"/home/Acmore_judge/data"
+#define FOLDER_JUDGE 	"/home/Acmore_judge/run"
 
 #define THREAD_NUM 4
 
-const std::string warn_log_path = "/home/judge/log/warn/";
-const std::string error_log_path = "/home/judge/log/error/";
+const std::string warn_log_path = "/home/Acmore_judge/log/warn/";
+const std::string error_log_path = "/home/Acmore_judge/log/error/";
 
 #endif
