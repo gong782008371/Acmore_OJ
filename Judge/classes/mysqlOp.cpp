@@ -72,6 +72,69 @@ bool CMysqlOp::QueryRuntimeLimit(int &time_limit, int &memory_limit, int problem
     return false;
 }
 
+bool CMysqlOp::QueryAllUser(std::vector<std::string>& vec)
+{
+    vec.clear();
+    const char sql[] = {" SELECT username FROM test.users"};
+    conn->SelectQuery(sql);
+    while(char** r = conn->FetchRow())
+    {
+        std::string username(r[0]);;
+        vec.push_back(username);
+    }
+    return true;
+}
+
+bool CMysqlOp::QuerySolvedAndSubmitOfUser(int & solved, int & submit, std::string username)
+{
+    solved = submit = 0;
+    char sql[SQL_BUF_SIZE] = {0};
+    sprintf(sql, "SELECT COUNT(DISTINCT problem_id), COUNT(solution_id) FROM test.solution WHERE username='%s'", username.c_str());
+    conn->SelectQuery(sql);
+    while(char** r = conn->FetchRow())
+    {
+        solved = ConvertCharsToInt(r[0]);
+        submit = ConvertCharsToInt(r[1]);
+    }
+    return true;
+}
+
+bool CMysqlOp::QueryAllProblem(std::vector<int>& vec)
+{
+    vec.clear();
+    const char sql[] = {" SELECT problem_id FROM test.problems"};
+    conn->SelectQuery(sql);
+    while(char** r = conn->FetchRow())
+    {
+        int problem_id = ConvertCharsToInt(r[0]);
+        vec.push_back(problem_id);
+    }
+    return true;
+}
+
+bool CMysqlOp::QueryAcceptAndSubmitOfProblem(int & accept_submit, int & total_submit, int problem_id)
+{
+    accept_submit = total_submit = 0;
+    char sql[SQL_BUF_SIZE] = {0};
+
+    sprintf(sql, "SELECT COUNT(*) FROM test.solution WHERE problem_id=%d", problem_id);
+    conn->SelectQuery(sql);
+    while(char** r = conn->FetchRow())
+    {
+        total_submit = ConvertCharsToInt(r[0]);
+    }
+
+    sprintf(sql, "SELECT COUNT(*) FROM test.solution WHERE problem_id=%d AND result=1", problem_id);
+    conn->SelectQuery(sql);
+    while(char** r = conn->FetchRow())
+    {
+        accept_submit = ConvertCharsToInt(r[0]);
+    }
+
+    return true;
+}
+
+
 bool CMysqlOp::InsertCompileInfo(int solution_id, const char * info)
 {
     char sql[SQL_BUF_SIZE];
@@ -99,6 +162,29 @@ bool CMysqlOp::UpdateSolutionCodeLength(int code_length, int solution_id)
 {
     char sql[SQL_BUF_SIZE];
     sprintf(sql, "UPDATE test.solution SET code_length=%d WHERE solution_id=%d",  code_length, solution_id);
+    if (conn->ModifyQuery(sql) < 0)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool CMysqlOp::UpdateSolvedAndSubmitOfUser(int solved, int submit, std::string username)
+{
+    char sql[SQL_BUF_SIZE] = {0};
+    sprintf(sql, "UPDATE test.users SET solved=%d, submit=%d WHERE username='%s'", solved, submit, username.c_str());
+    if (conn->ModifyQuery(sql) < 0)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool CMysqlOp::UpdateAcceptAndSubmitOfProblem(int accept_submit, int total_submit, int problem_id)
+{
+    char sql[SQL_BUF_SIZE] = {0};
+    sprintf(sql, "UPDATE test.problems SET accept_submit=%d, total_submit=%d WHERE problem_id='%d'",
+        accept_submit, total_submit, problem_id);
     if (conn->ModifyQuery(sql) < 0)
     {
         return false;

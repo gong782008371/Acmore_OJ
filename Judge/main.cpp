@@ -1,13 +1,14 @@
 #include "classes/trace.h"
 #include "classes/judge.h"
 #include "classes/mysqlOp.h"
+#include "classes/statistic.h"
 using namespace std;
 
 CMysqlOp* mysqlOp;
 std::queue<Record> queue_judge;
 std::map<int, bool> judge_map;
 pthread_mutex_t queue_lock;
-pthread_t threads[THREAD_NUM];
+pthread_t threads[THREAD_NUM], statisticThread;
 
 void Initialize()
 {
@@ -42,6 +43,17 @@ void* JudgeThread(void *)
     }
 }
 
+void* StatisticThread(void *)
+{
+    CStatistic* cs = new CStatistic();
+    while(1)
+    {
+        fflush(stdout);
+        cs->Run();
+        sleep(1);
+    }
+}
+
 int main()
 {
     // initialize var
@@ -52,6 +64,8 @@ int main()
     {
         pthread_create(&threads[i], NULL, JudgeThread, NULL);
     }
+
+    pthread_create(&statisticThread, NULL, StatisticThread, NULL);
 
     std::vector<Record> vec;
     while(1)
