@@ -159,6 +159,8 @@ bool CJudgeBase::Run(const char * RUN[])
         return false;
     }
 
+    mysqlOp->UpdateSolution(RT_RUN, 0, 0, solution_id);
+
     result = RT_AC;
     for (; result == RT_AC && (dirent_data_in = readdir(dir_data)) != NULL; )  
     if( IsInFile(dirent_data_in->d_name) )

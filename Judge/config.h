@@ -12,6 +12,7 @@
 #define RT_TLE 6
 #define RT_MLE 7
 #define RT_OLE 8
+#define RT_RUN 9
 
 #define LG_GPP  1
 #define LG_JAVA 2
