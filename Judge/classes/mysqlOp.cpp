@@ -89,12 +89,18 @@ bool CMysqlOp::QuerySolvedAndSubmitOfUser(int & solved, int & submit, std::strin
 {
     solved = submit = 0;
     char sql[SQL_BUF_SIZE] = {0};
-    sprintf(sql, "SELECT COUNT(DISTINCT problem_id), COUNT(solution_id) FROM test.solution WHERE username='%s'", username.c_str());
+    sprintf(sql, "SELECT COUNT(solution_id) FROM test.solution WHERE username='%s'", username.c_str());
+    conn->SelectQuery(sql);
+    while(char** r = conn->FetchRow())
+    {
+        submit = ConvertCharsToInt(r[0]);
+    }
+    
+    sprintf(sql, "SELECT COUNT(DISTINCT problem_id) FROM test.solution WHERE username='%s' AND result=1", username.c_str());
     conn->SelectQuery(sql);
     while(char** r = conn->FetchRow())
     {
         solved = ConvertCharsToInt(r[0]);
-        submit = ConvertCharsToInt(r[1]);
     }
     return true;
 }
