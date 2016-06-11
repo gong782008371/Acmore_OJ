@@ -21,6 +21,7 @@ public:
     bool InsertCompileInfo(int solution_id, const char * info);
 
     bool UpdateSolution(int result, int use_time, int use_mem, int solution_id);
+    bool UpdateSolutionCodeLength(int code_length, int solution_id);
 
 private:
     int ConvertCharsToInt(char* s);

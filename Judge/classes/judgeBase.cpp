@@ -49,6 +49,7 @@ bool CJudgeBase::GenerateMain(std::string file_name)
         TRACE_WARN("write to file(%s) failed.", (folder_judge + file_name).c_str());
         return false;
     }
+    mysqlOp->UpdateSolutionCodeLength(get_file_size((folder_judge + file_name).c_str()), solution_id);
     close(fd);
     return true;
 }

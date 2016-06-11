@@ -95,6 +95,16 @@ bool CMysqlOp::UpdateSolution(int result, int use_time, int use_mem, int solutio
     }
     return true;
 }
+bool CMysqlOp::UpdateSolutionCodeLength(int code_length, int solution_id)
+{
+    char sql[SQL_BUF_SIZE];
+    sprintf(sql, "UPDATE test.solution SET code_length=%d WHERE solution_id=%d",  code_length, solution_id);
+    if (conn->ModifyQuery(sql) < 0)
+    {
+        return false;
+    }
+    return true;
+}
 
 int CMysqlOp::ConvertCharsToInt(char* s)
 {
