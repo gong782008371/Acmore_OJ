@@ -1,6 +1,7 @@
 #include "judge.h"
 
 #include "judgeGPP.h"
+#include "judgeC.h"
 
 int CJudge ::COUNT_JUDGE = 0;
 
@@ -38,5 +39,8 @@ void CJudge::CheckJudge(int language) {
     case LG_GPP:
         judges[LG_GPP] = new CJudgeGPP(judge_root);
         break;
+    case LG_C:
+	judges[LG_C] = new CJudgeC(judge_root);
+  	break;
     }
 }

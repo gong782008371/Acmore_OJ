@@ -16,6 +16,7 @@
 
 #define LG_GPP  1
 #define LG_JAVA 2
+#define LG_C    3
 
 #define MYSQL_IP                 "localhost"
 #define MYSQL_USERNAME  "root"
